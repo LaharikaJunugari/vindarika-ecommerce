@@ -34,7 +34,7 @@ public class AdminController {
 	private ProductService pservice;
 	@Autowired
 	private AdminService aservice;
-	public static String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/productImages";
+	public static String uploadDir = "/app/productImages";
 
 	@GetMapping("/admin")
 	public String admin() {
