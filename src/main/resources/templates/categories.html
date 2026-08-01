@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika Admin - Categories</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+    .logout-link {
+        text-decoration: none;
+        color: #f5f0e8;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: 1.5px solid #c9a55c;
+        padding: 9px 20px;
+    }
+    .logout-link:hover { background: #c9a55c; color: #1a1a1a; }
+
+    .wrap { padding: 40px; max-width: 900px; margin: 0 auto; }
+    .page-title {
+        font-size: 22px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 24px;
+    }
+    .page-title b { font-weight: 700; }
+    .add-btn {
+        display: inline-block;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        text-decoration: none;
+        padding: 12px 24px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 26px;
+    }
+    .add-btn:hover { background: #c9a55c; color: #1a1a1a; }
+
+    table { width: 100%; border-collapse: collapse; background: white; }
+    thead th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+        font-weight: 700;
+        padding: 14px 16px;
+        border-bottom: 2px solid #1a1a1a;
+    }
+    tbody td {
+        padding: 16px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        color: #333;
+    }
+    .action-link {
+        display: inline-block;
+        border: 1px solid #1a1a1a;
+        color: #1a1a1a;
+        text-decoration: none;
+        padding: 7px 16px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .action-link:hover { background: #1a1a1a; color: #f5f0e8; }
+    .delete-link { border-color: #b3261e; color: #b3261e; margin-right: 8px; }
+    .delete-link:hover { background: #b3261e; color: white; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <div class="brand">Vin<span>darika</span></div>
+    <a class="logout-link" th:href="@{/admin}">Logout</a>
+</div>
+
+<div class="wrap">
+    <div class="page-title">Manage <b>Categories</b></div>
+    <a th:href="@{/admin/categories/add}" class="add-btn">+ Add Category</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="category, iStat : ${categories}">
+                <td th:text="${iStat.index + 1}"></td>
+                <td th:text="${category.name}"></td>
+                <td>
+                    <a th:href="@{/admin/categories/delete/{id}(id=${category.id})}" class="action-link delete-link">Delete</a>
+                    <a th:href="@{/admin/categories/update/{id}(id=${category.id})}" class="action-link">Update</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

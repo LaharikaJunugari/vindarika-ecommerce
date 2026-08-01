@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vindarika - Shop</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background-color: #faf8f5;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* --- Top Nav --- */
+        .topnav {
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #f5f0e8;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .brand span { color: #c9a55c; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #e8e4dc;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .cart-link {
+            position: relative;
+            background: #c9a55c;
+            color: #1a1a1a !important;
+            padding: 8px 18px;
+            border-radius: 2px;
+            font-weight: 700;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #1a1a1a;
+            color: #f5f0e8;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* --- Category strip --- */
+        .category-strip {
+            display: flex;
+            gap: 18px;
+            overflow-x: auto;
+            padding: 22px 40px;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+        .category-item {
+            text-align: center;
+            text-decoration: none;
+            flex: 0 0 auto;
+        }
+        .category-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #faf8f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 6px auto;
+            border: 2px solid #e8e0d0;
+        }
+        .category-item:hover .category-circle { border-color: #c9a55c; }
+        .category-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Filter bar --- */
+        .filter-bar {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 18px 40px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+        .filter-bar label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #1a1a1a;
+            margin-right: 6px;
+        }
+        .filter-bar select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            font-size: 13px;
+            color: #333;
+            background: #faf8f5;
+        }
+        .filter-btn {
+            background: #1a1a1a;
+            color: #f5f0e8;
+            border: none;
+            padding: 9px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        .filter-btn:hover { background: #c9a55c; color: #1a1a1a; }
+        .clear-link {
+            font-size: 12px;
+            color: #999;
+            text-decoration: underline;
+        }
+
+        /* --- Product grid --- */
+        .products-wrap { padding: 30px 40px 60px 40px; }
+        .section-title {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #1a1a1a;
+            margin: 0 0 22px 0;
+        }
+        .section-title b { font-weight: 700; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 22px;
+        }
+        .product-card {
+            background: white;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s ease;
+        }
+        .product-card:hover { border-color: #c9a55c; }
+        .product-img { width: 100%; height: 230px; object-fit: cover; }
+        .product-info { padding: 14px; flex-grow: 1; }
+        .product-name { font-size: 13px; font-weight: 600; color: #222; min-height: 34px; }
+        .product-meta { font-size: 11px; color: #999; margin: 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .product-price { font-size: 15px; font-weight: 700; color: #c9a55c; margin: 8px 0 0 0; }
+
+        .add-btn {
+            background: #fff;
+            border: 1.5px solid #1a1a1a;
+            color: #1a1a1a;
+            font-weight: 700;
+            padding: 9px 0;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+        }
+        .add-btn:hover { background: #1a1a1a; color: #f5f0e8; }
+        .view-link {
+            font-size: 11px;
+            text-align: center;
+            display: block;
+            margin-top: 8px;
+            padding-bottom: 12px;
+            color: #999;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+        .view-link:hover { color: #c9a55c; }
+
+        .no-results { text-align: center; padding: 60px 0; color: #999; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="topnav">
+    <a class="brand" th:href="@{/}">Vin<span>darika</span></a>
+    <ul class="nav-links">
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li th:if="${session.loggedInCustomer == null}"><a th:href="@{/customer/login}">Login</a></li>
+        <li th:if="${session.loggedInCustomer != null}"><a th:href="@{/orders}">My Orders</a></li>
+        <li th:if="${session.loggedInCustomer != null}">
+            <a th:href="@{/customer/logout}">Logout (<span th:text="${session.loggedInCustomer.name}"></span>)</a>
+        </li>
+        <li>
+            <a class="cart-link" th:href="@{/cart}">
+                Cart
+                <span class="cart-badge" th:if="${cartCount > 0}" th:text="${cartCount}"></span>
+            </a>
+        </li>
+        <li><a sec:authorize="isAnonymous()" th:href="@{/admin}">Admin</a></li>
+    </ul>
+</div>
+
+<!-- CATEGORY STRIP -->
+<div class="category-strip">
+    <a th:href="@{/shop}" class="category-item">
+        <div class="category-circle">✨</div>
+        <div class="category-name">All</div>
+    </a>
+    <a th:each="category : ${categories}"
+       th:href="@{/shop/category/{id}(id=${category.id})}"
+       class="category-item">
+        <div class="category-circle">👗</div>
+        <div class="category-name" th:text="${category.name}"></div>
+    </a>
+</div>
+
+<!-- FILTER BAR -->
+<form class="filter-bar" method="get" th:action="@{/shop}">
+    <label>Size</label>
+    <select name="size">
+        <option value="">All</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+    </select>
+
+    <label>Color</label>
+    <select name="color">
+        <option value="">All</option>
+        <option value="Black">Black</option>
+        <option value="White">White</option>
+        <option value="Charcoal">Charcoal</option>
+        <option value="Cream">Cream</option>
+        <option value="Gold">Gold</option>
+        <option value="Navy">Navy</option>
+        <option value="Beige">Beige</option>
+    </select>
+
+    <button type="submit" class="filter-btn">Filter</button>
+    <a class="clear-link" th:href="@{/shop}">Clear filters</a>
+</form>
+
+<!-- PRODUCT GRID -->
+<div class="products-wrap">
+    <div class="section-title">The <b>Collection</b></div>
+
+    <div class="product-grid" th:if="${!products.isEmpty()}">
+        <div class="product-card" th:each="product : ${products}">
+            <img class="product-img" th:src="@{${'/productImages/' + product.imageName}}" th:alt="${product.name}">
+            <div class="product-info">
+                <div class="product-name" th:text="${product.name}"></div>
+                <div class="product-meta">
+                    <span th:if="${product.color != null}" th:text="${product.color}"></span>
+                    <span th:if="${product.size != null}"> · </span>
+                    <span th:if="${product.size != null}" th:text="${product.size}"></span>
+                </div>
+                <div class="product-price">₹<span th:text="${product.price}"></span></div>
+            </div>
+
+            <form method="post" th:action="@{'/cart/add/' + ${product.id}}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="add-btn">Add to Bag</button>
+            </form>
+            <a class="view-link" th:href="@{/shop/viewproduct/{id}(id=${product.id})}">View details</a>
+        </div>
+    </div>
+
+    <div class="no-results" th:if="${products.isEmpty()}">
+        No products match your filters. <a th:href="@{/shop}" style="color:#c9a55c;">Clear filters</a>
+    </div>
+</div>
+
+</body>
+</html>

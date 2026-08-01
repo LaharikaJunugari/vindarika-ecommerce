@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika Admin - Orders</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+    .back-link {
+        text-decoration: none;
+        color: #f5f0e8;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: 1.5px solid #c9a55c;
+        padding: 9px 20px;
+    }
+    .back-link:hover { background: #c9a55c; color: #1a1a1a; }
+
+    .wrap { padding: 40px; max-width: 900px; margin: 0 auto; }
+    .page-title {
+        font-size: 22px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 26px;
+    }
+    .page-title b { font-weight: 700; }
+
+    .order-card {
+        background: white;
+        border-top: 3px solid #c9a55c;
+        padding: 22px 26px;
+        margin-bottom: 18px;
+    }
+    .order-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    .order-id { font-weight: 700; font-size: 15px; color: #1a1a1a; }
+    .order-date { font-size: 12px; color: #999; }
+    .order-customer { font-size: 13px; color: #555; margin-bottom: 6px; }
+    .order-address { font-size: 13px; color: #555; margin-bottom: 14px; }
+    .order-items { font-size: 13px; color: #444; margin: 0 0 16px 0; padding-left: 18px; }
+    .order-items li { padding: 4px 0; }
+    .order-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #eee;
+        padding-top: 14px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .order-total { font-weight: 700; font-size: 15px; color: #1a1a1a; }
+
+    select {
+        padding: 8px 12px;
+        border: 1.5px solid #ddd;
+        font-size: 13px;
+        margin-right: 8px;
+        background: #faf8f5;
+    }
+    .update-btn {
+        background: #1a1a1a;
+        color: #f5f0e8;
+        border: none;
+        padding: 9px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .update-btn:hover { background: #c9a55c; color: #1a1a1a; }
+
+    .status-badge {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        padding: 5px 12px;
+        text-transform: uppercase;
+    }
+    .status-PLACED { background: #f5f0e8; color: #c9a55c; }
+    .status-PACKED { background: #eaeaea; color: #1a1a1a; }
+    .status-OUT_FOR_DELIVERY { background: #1a1a1a; color: #c9a55c; }
+    .status-DELIVERED { background: #1a1a1a; color: #f5f0e8; }
+    .empty-msg { color: #999; text-align: center; padding: 40px 0; background: white; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <div class="brand">Vin<span>darika</span> Admin</div>
+    <a class="back-link" th:href="@{/admin}">← Dashboard</a>
+</div>
+
+<div class="wrap">
+    <div class="page-title">All <b>Orders</b></div>
+
+    <div th:each="order : ${orders}" class="order-card">
+        <div class="order-top">
+            <span class="order-id">Order #<span th:text="${order.id}"></span></span>
+            <span class="order-date" th:text="${order.orderDate}"></span>
+        </div>
+        <div class="order-customer">
+            Customer: <b th:text="${order.customer.name}"></b> (<span th:text="${order.customer.email}"></span>)
+        </div>
+        <div class="order-address">Deliver to: <span th:text="${order.deliveryAddress}"></span></div>
+
+        <ul class="order-items">
+            <li th:each="item : ${order.items}"
+                th:text="${item.product.name} + ' × ' + ${item.quantity} + ' — ₹' + ${item.priceAtOrder}"></li>
+        </ul>
+
+        <div class="order-bottom">
+            <span class="order-total">Total: ₹<span th:text="${order.totalAmount}"></span></span>
+
+            <span th:class="'status-badge status-' + ${order.status}" th:text="${order.status}"></span>
+
+            <form method="post" th:action="@{'/admin/orders/updateStatus/' + ${order.id}}" style="display:flex; align-items:center;">
+                <select name="status">
+                    <option value="PLACED" th:selected="${order.status == 'PLACED'}">Placed</option>
+                    <option value="PACKED" th:selected="${order.status == 'PACKED'}">Packed</option>
+                    <option value="OUT_FOR_DELIVERY" th:selected="${order.status == 'OUT_FOR_DELIVERY'}">Out for Delivery</option>
+                    <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">Delivered</option>
+                </select>
+                <button type="submit" class="update-btn">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <p th:if="${#lists.isEmpty(orders)}" class="empty-msg">No orders placed yet.</p>
+</div>
+
+</body>
+</html>

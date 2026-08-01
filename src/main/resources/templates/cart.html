@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika - My Bag</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+
+    .cart-wrap { max-width: 900px; margin: 0 auto; padding: 50px 40px; }
+    .cart-title {
+        font-size: 26px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+    }
+    .cart-title b { font-weight: 700; }
+    .continue-link {
+        display: inline-block;
+        font-size: 13px;
+        color: #999;
+        text-decoration: none;
+        margin-bottom: 30px;
+        letter-spacing: 0.5px;
+    }
+    .continue-link:hover { color: #c9a55c; }
+
+    table { width: 100%; border-collapse: collapse; background: white; }
+    thead th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+        font-weight: 700;
+        padding: 14px 16px;
+        border-bottom: 2px solid #1a1a1a;
+    }
+    tbody td {
+        padding: 18px 16px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        color: #333;
+    }
+    .qty-form { display: flex; gap: 8px; align-items: center; }
+    .qty-form input {
+        width: 60px;
+        padding: 8px;
+        border: 1.5px solid #ddd;
+        text-align: center;
+        font-size: 13px;
+    }
+    .update-btn, .remove-link {
+        background: none;
+        border: 1px solid #1a1a1a;
+        color: #1a1a1a;
+        padding: 7px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .update-btn:hover { background: #1a1a1a; color: #f5f0e8; }
+    .remove-link { border-color: #b3261e; color: #b3261e; }
+    .remove-link:hover { background: #b3261e; color: white; }
+
+    .total-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        padding: 26px 16px;
+        border-top: 2px solid #1a1a1a;
+        background: white;
+    }
+    .total-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+    .total-value { font-size: 24px; font-weight: 700; color: #1a1a1a; }
+
+    .empty-cart { text-align: center; padding: 60px 0; color: #999; font-size: 14px; background: white; }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        border: none;
+        padding: 18px 0;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+    .checkout-btn:hover { background: #c9a55c; color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <a class="brand" th:href="@{/}">Vin<span>darika</span></a>
+</div>
+
+<div class="cart-wrap">
+    <div class="cart-title">My <b>Bag</b></div>
+    <a th:href="@{/shop}" class="continue-link">← Continue Shopping</a>
+
+    <table th:if="${!#lists.isEmpty(cartItems)}">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td th:text="${item.product.name}"></td>
+                <td>₹<span th:text="${item.product.price}"></span></td>
+                <td>
+                    <form class="qty-form" method="post" th:action="@{'/cart/update/' + ${item.id}}">
+                        <input type="number" name="quantity" th:value="${item.quantity}" min="0">
+                        <button type="submit" class="update-btn">Update</button>
+                    </form>
+                </td>
+                <td>₹<span th:text="${item.product.price * item.quantity}"></span></td>
+                <td><a class="remove-link" th:href="@{'/cart/remove/' + ${item.id}}">Remove</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total-row" th:if="${!#lists.isEmpty(cartItems)}">
+        <span class="total-label">Total</span>
+        <span class="total-value">₹<span th:text="${total}"></span></span>
+    </div>
+
+    <div class="empty-cart" th:if="${#lists.isEmpty(cartItems)}">
+        Your bag is empty.
+    </div>
+
+    <a th:href="@{/checkout}" th:if="${!#lists.isEmpty(cartItems)}" class="checkout-btn">
+        Proceed to Checkout
+    </a>
+</div>
+
+</body>
+</html>

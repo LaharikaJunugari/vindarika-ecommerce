@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika Admin - Add Product</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+    .logout-link {
+        text-decoration: none;
+        color: #f5f0e8;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: 1.5px solid #c9a55c;
+        padding: 9px 20px;
+    }
+    .logout-link:hover { background: #c9a55c; color: #1a1a1a; }
+
+    .wrap { max-width: 560px; margin: 50px auto; padding: 0 40px 60px 40px; }
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 13px;
+        color: #999;
+        text-decoration: none;
+    }
+    .back-link:hover { color: #c9a55c; }
+    .page-title {
+        font-size: 22px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 26px;
+    }
+    .page-title b { font-weight: 700; }
+
+    .form-box {
+        background: white;
+        border-top: 3px solid #c9a55c;
+        padding: 34px 32px;
+    }
+    label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #1a1a1a;
+        display: block;
+        margin-bottom: 8px;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid #ddd;
+        background: #faf8f5;
+        font-size: 14px;
+        margin-bottom: 20px;
+        outline: none;
+        font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #c9a55c; }
+    textarea { resize: vertical; }
+
+    .two-col { display: flex; gap: 16px; }
+    .two-col > div { flex: 1; }
+
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1.5px dashed #ccc;
+        background: #faf8f5;
+        font-size: 13px;
+        margin-bottom: 16px;
+    }
+    #imgPreview {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        object-fit: cover;
+    }
+    .submit-btn {
+        width: 100%;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        border: none;
+        padding: 14px 0;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .submit-btn:hover { background: #c9a55c; color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <div class="brand">Vin<span>darika</span></div>
+    <a class="logout-link" th:href="@{/admin}">Logout</a>
+</div>
+
+<div class="wrap">
+    <a th:href="@{/admin/products}" class="back-link">← Back to Products</a>
+    <div class="page-title">Add <b>Product</b></div>
+
+    <div class="form-box">
+        <form th:action="@{/admin/products/add}" method="post" th:object="${productDTO}" enctype="multipart/form-data">
+
+            <input type="hidden" name="id" th:field="*{id}">
+
+            <label for="name">Name</label>
+            <input type="text" th:field="*{name}" name="name" id="name" required placeholder="e.g. Floral Wrap Dress">
+
+            <label for="category">Category</label>
+            <select th:field="*{categoryId}" id="category" name="category">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+
+            <div class="two-col">
+                <div>
+                    <label for="price">Price (₹)</label>
+                    <input type="number" th:field="*{price}" name="price" id="price" required placeholder="e.g. 1999">
+                </div>
+                <div>
+                    <label for="weight">Weight (grams)</label>
+                    <input type="number" th:field="*{weight}" name="weight" id="weight" required placeholder="e.g. 400">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div>
+                    <label for="size">Size</label>
+                    <select th:field="*{size}" id="size" name="size">
+                        <option value="">Select size</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="color">Color</label>
+                    <input type="text" th:field="*{color}" name="color" id="color" placeholder="e.g. Charcoal">
+                </div>
+            </div>
+
+            <label for="description">Product Description</label>
+            <textarea rows="4" th:field="*{description}" name="description" id="description"></textarea>
+
+            <label>Product Image</label>
+            <input type="file" name="productImage" accept="image/jpeg, image/png" id="productImage">
+
+            <img id="imgPreview" height="100" width="100"
+                 th:src="@{${'/productImages/' + productDTO.imageName}}" alt="">
+
+            <input type="hidden" name="imgName" th:value="${productDTO.imageName}">
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#imgPreview').attr('src', e.target.result).width(100).height(100);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $('#productImage').change(function() {
+        readURL(this);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika - Checkout</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+
+    .wrap { max-width: 700px; margin: 0 auto; padding: 50px 40px; }
+    .page-title {
+        font-size: 26px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 30px;
+    }
+    .page-title b { font-weight: 700; }
+
+    .section-label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 14px;
+    }
+
+    table { width: 100%; border-collapse: collapse; background: white; margin-bottom: 30px; }
+    thead th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+        font-weight: 700;
+        padding: 14px 16px;
+        border-bottom: 2px solid #1a1a1a;
+    }
+    tbody td {
+        padding: 16px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        padding: 20px 16px;
+        background: white;
+        border-top: 2px solid #1a1a1a;
+        margin-bottom: 34px;
+    }
+    .total-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+    .total-value { font-size: 24px; font-weight: 700; color: #1a1a1a; }
+
+    .address-box {
+        background: white;
+        padding: 28px;
+        border-top: 3px solid #c9a55c;
+    }
+    label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #1a1a1a;
+        display: block;
+        margin-bottom: 10px;
+    }
+    textarea {
+        width: 100%;
+        padding: 14px;
+        border: 1.5px solid #ddd;
+        font-size: 14px;
+        font-family: inherit;
+        resize: vertical;
+        margin-bottom: 22px;
+        outline: none;
+    }
+    textarea:focus { border-color: #c9a55c; }
+
+    .place-btn {
+        width: 100%;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        border: none;
+        padding: 16px 0;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .place-btn:hover { background: #c9a55c; color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <a class="brand" th:href="@{/}">Vin<span>darika</span></a>
+</div>
+
+<div class="wrap">
+    <div class="page-title">Check<b>out</b></div>
+
+    <div class="section-label">Order Summary</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td th:text="${item.product.name}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td>₹<span th:text="${item.product.price * item.quantity}"></span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total-row">
+        <span class="total-label">Total</span>
+        <span class="total-value">₹<span th:text="${total}"></span></span>
+    </div>
+
+    <div class="address-box">
+        <form method="post" th:action="@{/checkout/place}">
+            <label for="deliveryAddress">Delivery Address</label>
+            <textarea name="deliveryAddress" id="deliveryAddress" rows="4" required placeholder="Enter your full delivery address"></textarea>
+            <button type="submit" class="place-btn">Place Order</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

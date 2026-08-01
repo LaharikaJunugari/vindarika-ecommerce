@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika Admin - Products</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+    .logout-link {
+        text-decoration: none;
+        color: #f5f0e8;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: 1.5px solid #c9a55c;
+        padding: 9px 20px;
+    }
+    .logout-link:hover { background: #c9a55c; color: #1a1a1a; }
+
+    .wrap { padding: 40px; max-width: 1100px; margin: 0 auto; }
+    .page-title {
+        font-size: 22px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 24px;
+    }
+    .page-title b { font-weight: 700; }
+    .add-btn {
+        display: inline-block;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        text-decoration: none;
+        padding: 12px 24px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 26px;
+    }
+    .add-btn:hover { background: #c9a55c; color: #1a1a1a; }
+
+    table { width: 100%; border-collapse: collapse; background: white; }
+    thead th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+        font-weight: 700;
+        padding: 14px 16px;
+        border-bottom: 2px solid #1a1a1a;
+    }
+    tbody td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+        color: #333;
+        vertical-align: middle;
+    }
+    .product-thumb { width: 60px; height: 70px; object-fit: cover; display: block; }
+    .action-link {
+        display: inline-block;
+        border: 1px solid #1a1a1a;
+        color: #1a1a1a;
+        text-decoration: none;
+        padding: 7px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .action-link:hover { background: #1a1a1a; color: #f5f0e8; }
+    .delete-link { border-color: #b3261e; color: #b3261e; margin-right: 6px; }
+    .delete-link:hover { background: #b3261e; color: white; }
+    .muted { color: #bbb; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <div class="brand">Vin<span>darika</span></div>
+    <a class="logout-link" th:href="@{/admin}">Logout</a>
+</div>
+
+<div class="wrap">
+    <div class="page-title">Manage <b>Products</b></div>
+    <a th:href="@{/admin/products/add}" class="add-btn">+ Add Product</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product, iStat : ${products}">
+                <td th:text="${iStat.index + 1}"></td>
+                <td><img class="product-thumb" th:src="@{${'/productImages/' + product.imageName}}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.category.name}"></td>
+                <td>
+                    <span th:if="${product.size != null}" th:text="${product.size}"></span>
+                    <span th:if="${product.size == null}" class="muted">—</span>
+                </td>
+                <td>
+                    <span th:if="${product.color != null}" th:text="${product.color}"></span>
+                    <span th:if="${product.color == null}" class="muted">—</span>
+                </td>
+                <td>
+                    <a th:href="@{/admin/product/delete/{id}(id=${product.id})}" class="action-link delete-link">Delete</a>
+                    <a th:href="@{/admin/product/update/{id}(id=${product.id})}" class="action-link">Update</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika - Order Confirmed</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+
+    .wrap {
+        max-width: 560px;
+        margin: 60px auto;
+        padding: 0 40px;
+        text-align: center;
+    }
+    .check-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #1a1a1a;
+        color: #c9a55c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin: 0 auto 24px auto;
+    }
+    .confirm-title {
+        font-size: 24px;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+    }
+    .confirm-title b { font-weight: 700; }
+    .confirm-sub {
+        font-size: 13px;
+        color: #999;
+        margin-bottom: 36px;
+    }
+
+    .details-box {
+        background: white;
+        border-top: 3px solid #c9a55c;
+        padding: 28px 32px;
+        text-align: left;
+        margin-bottom: 30px;
+    }
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label {
+        color: #999;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+    }
+    .detail-value { color: #1a1a1a; font-weight: 600; text-align: right; max-width: 60%; }
+
+    .link-row { display: flex; gap: 16px; }
+    .link-btn {
+        flex: 1;
+        display: block;
+        text-align: center;
+        padding: 14px 0;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-decoration: none;
+    }
+    .primary-link { background: #1a1a1a; color: #f5f0e8; }
+    .primary-link:hover { background: #c9a55c; color: #1a1a1a; }
+    .secondary-link { border: 1.5px solid #1a1a1a; color: #1a1a1a; }
+    .secondary-link:hover { background: #1a1a1a; color: #f5f0e8; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <a class="brand" th:href="@{/}">Vin<span>darika</span></a>
+</div>
+
+<div class="wrap">
+    <div class="check-icon">✓</div>
+    <div class="confirm-title">Order <b>Confirmed</b></div>
+    <div class="confirm-sub">Thank you for shopping with Vindarika.</div>
+
+    <div class="details-box">
+        <div class="detail-row">
+            <span class="detail-label">Order ID</span>
+            <span class="detail-value" th:text="${order.id}"></span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Total Amount</span>
+            <span class="detail-value">₹<span th:text="${order.totalAmount}"></span></span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Delivery Address</span>
+            <span class="detail-value" th:text="${order.deliveryAddress}"></span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value" th:text="${order.status}"></span>
+        </div>
+    </div>
+
+    <div class="link-row">
+        <a th:href="@{/shop}" class="link-btn secondary-link">Continue Shopping</a>
+        <a th:href="@{/orders}" class="link-btn primary-link">View My Orders</a>
+    </div>
+</div>
+
+</body>
+</html>

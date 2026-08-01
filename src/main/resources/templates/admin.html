@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vindarika Admin Dashboard</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #faf8f5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .topnav {
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 40px;
+    }
+    .brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #f5f0e8;
+        text-transform: uppercase;
+    }
+    .brand span { color: #c9a55c; }
+    .brand small {
+        font-size: 11px;
+        color: #999;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-left: 10px;
+        text-transform: uppercase;
+    }
+    .logout-link {
+        text-decoration: none;
+        color: #f5f0e8;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: 1.5px solid #c9a55c;
+        padding: 9px 20px;
+    }
+    .logout-link:hover { background: #c9a55c; color: #1a1a1a; }
+
+    .dash-wrap { padding: 50px 40px; }
+    .dash-title {
+        font-size: 24px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #1a1a1a;
+        margin-bottom: 30px;
+    }
+    .dash-title b { font-weight: 700; }
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 22px;
+        max-width: 900px;
+    }
+    .dash-card {
+        background: white;
+        border: 1px solid #eee;
+        padding: 28px;
+        transition: border-color 0.2s ease;
+    }
+    .dash-card:hover { border-color: #c9a55c; }
+    .dash-card h4 {
+        margin: 0 0 6px 0;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #1a1a1a;
+        text-transform: uppercase;
+    }
+    .dash-card p {
+        font-size: 13px;
+        color: #888;
+        margin: 0 0 20px 0;
+    }
+    .manage-btn {
+        display: inline-block;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        text-decoration: none;
+        padding: 10px 22px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .manage-btn:hover { background: #c9a55c; color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+    <div class="brand">Vin<span>darika</span><small>Admin</small></div>
+    <a class="logout-link" th:href="@{/admin}">Logout</a>
+</div>
+
+<div class="dash-wrap">
+    <div class="dash-title">Admin <b>Dashboard</b></div>
+    <div class="card-grid">
+
+        <div class="dash-card">
+            <h4>Categories</h4>
+            <p>Manage fashion categories</p>
+            <a th:href="@{/admin/categories}" class="manage-btn">Manage</a>
+        </div>
+
+        <div class="dash-card">
+            <h4>Products</h4>
+            <p>Manage products, sizes & stock</p>
+            <a th:href="@{/admin/products}" class="manage-btn">Manage</a>
+        </div>
+
+        <div class="dash-card">
+            <h4>Orders</h4>
+            <p>View & update customer orders</p>
+            <a th:href="@{/admin/orders}" class="manage-btn">Manage</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
